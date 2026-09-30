@@ -19,10 +19,38 @@ public class ValidateCheckDigits {
         try (Scanner input = new Scanner(inputFile)) {
             while (input.hasNextLine()) {
                 String accountNumber = input.nextLine();
-                System.out.println(accountNumber);
+
+                if (isValid(accountNumber)) {
+                    System.out.println(accountNumber + " - Valid");
+                } else {
+                    System.out.println(accountNumber + " - Invalid");
+                }
             }
         } catch (FileNotFoundException e) {
             System.out.println("Could not find accounts.txt.");
         }
+    }
+
+    /**
+     * Checks the account's format and final check digit.
+     *
+     * @param accountNumber account number to validate
+     * @return true if the account number is valid
+     */
+    public static boolean isValid(String accountNumber) {
+        if (!accountNumber.matches("[0-9]{6}")) {
+            return false;
+        }
+
+        int sum = 0;
+
+        for (int i = 0; i < 5; i++) {
+            int digit = accountNumber.charAt(i) - '0';
+            sum += digit;
+        }
+
+        int lastDigit = accountNumber.charAt(5) - '0';
+
+        return sum % 10 == lastDigit;
     }
 }
