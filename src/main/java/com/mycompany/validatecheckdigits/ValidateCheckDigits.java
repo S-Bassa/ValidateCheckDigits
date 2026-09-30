@@ -2,6 +2,7 @@ package com.mycompany.validatecheckdigits;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -15,19 +16,27 @@ public class ValidateCheckDigits {
         System.out.println("Account Number Validation");
 
         File inputFile = new File("accounts.txt");
+        File outputFile = new File("valid_accounts.txt");
 
-        try (Scanner input = new Scanner(inputFile)) {
+        try (Scanner input = new Scanner(inputFile);
+                PrintWriter output = new PrintWriter(outputFile)) {
+
             while (input.hasNextLine()) {
                 String accountNumber = input.nextLine();
 
                 if (isValid(accountNumber)) {
                     System.out.println(accountNumber + " - Valid");
+                    output.println(accountNumber);
                 } else {
                     System.out.println(accountNumber + " - Invalid");
                 }
             }
+
+            System.out.println("Valid accounts saved to valid_accounts.txt.");
+
         } catch (FileNotFoundException e) {
-            System.out.println("Could not find accounts.txt.");
+            System.out.println("Could not open the input or output file.");
+            System.out.println(e.getMessage());
         }
     }
 
